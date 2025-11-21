@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Support Bot</title>
+    <style>
+        body { font-family: sans-serif; max-width: 600px; margin: 2rem auto; padding: 0 1rem; }
+        #chat-box { border: 1px solid #ddd; height: 400px; overflow-y: scroll; padding: 1rem; margin-bottom: 1rem; border-radius: 8px; }
+        .message { margin-bottom: 0.5rem; padding: 0.5rem; border-radius: 4px; }
+        .user { background-color: #e3f2fd; text-align: right; }
+        .bot { background-color: #f5f5f5; }
+        #input-area { display: flex; gap: 0.5rem; }
+        input { flex-grow: 1; padding: 0.5rem; }
+        button { padding: 0.5rem 1rem; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h2>AI Support Assistant</h2>
+    <div id="chat-box"></div>
+    <div id="input-area">
+        <input type="text" id="user-input" placeholder="Type your question..." onkeypress="handleEnter(event)">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+    <script>
+        const sessionId = "session_" + Math.random().toString(36).substr(2, 9);
+
+        async function sendMessage() {
+            const input = document.getElementById('user-input');
+            const message = input.value.trim();
+            if (!message) return;
+
+            // Add user message
+            appendMessage('user', message);
+            input.value = '';
+
+            // Call API
+            try {
+                const response = await fetch('http://127.0.0.1:8000/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ session_id: sessionId, query: message })
+                });
+                const data = await response.json();
+                appendMessage('bot', data.response);
+            } catch (error) {
+                appendMessage('bot', 'Error connecting to server.');
+            }
+        }
+
+        function appendMessage(role, text) {
+            const chatBox = document.getElementById('chat-box');
+            const div = document.createElement('div');
+            div.className = `message ${role}`;
+            div.textContent = text;
+            chatBox.appendChild(div);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function handleEnter(e) {
+            if (e.key === 'Enter') sendMessage();
+        }
+    </script>
+</body>
+</html>
