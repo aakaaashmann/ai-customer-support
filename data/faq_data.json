@@ -1,5 +1,13 @@
 [
     {
+        "question": "What is the return policy for physical goods?",
+        "answer": "Physical items can be returned within 30 days of receipt if they are unused and in original packaging. Return shipping fees may apply."
+    },
+    {
+        "question": "Why was my credit card declined?",
+        "answer": "Cards are usually declined due to insufficient funds, incorrect billing address, or expiration. Please check your details or contact your bank."
+    },
+    {
         "question": "How can I reset my password?",
         "answer": "To reset your password, go to the login page and click on 'Forgot Password'. Enter your email address, and we will send you a link to set a new password."
     },
@@ -12,10 +20,43 @@
         "answer": "Yes, you can request account deletion. Go to 'Settings' > 'Privacy' and click 'Delete Account'. Please note this action is permanent and cannot be undone."
     },
     {
+        "question": "Is my data secure?",
+        "answer": "Yes, we use industry-standard encryption (AES-256) to protect your data. We do not sell your personal information to third parties."
+    },
+    {
+        "question": "Can I share my account with others?",
+        "answer": "Per our Terms of Service, accounts are for individual use only. Sharing credentials may lead to account suspension. We recommend our 'Team Plan' for multiple users."
+    },
+    {
+        "question": "The app is crashing on my phone, what should I do?",
+        "answer": "Please ensure you have the latest version of the app installed. If the issue persists, try clearing the app cache or reinstalling the application."
+    },
+    {
+        "question": "Do you support Two-Factor Authentication (2FA)?",
+        "answer": "Yes, we strongly recommend enabling 2FA. You can set it up in the 'Security' section of your account settings using SMS or an authenticator app."
+    },
+    {
+        "question": "How do I cancel my subscription?",
+        "answer": "To cancel, go to 'Settings' > 'Billing' > 'Manage Subscription' and click 'Cancel'. You will retain access until the end of your current billing cycle."
+    },
+    
+    {
+        "question": "Can I change my username?",
+        "answer": "Usernames can be changed once every 30 days. Go to 'Profile Settings' to update your display name."
+    },
+    {
+        "question": "Where can I find the API documentation?",
+        "answer": "Our developer API documentation is available at developer.ourcompany.com/docs. You will need an API key to make requests."
+    },
+    {
+        "question": "How do I report a bug?",
+        "answer": "If you encounter a bug, please submit a report via our 'Feedback' form in the app footer, including screenshots and steps to reproduce the issue."
+    },
+    {
         "question": "Where can I view my billing history?",
         "answer": "Your billing history and past invoices are available in the 'Billing' section of your account dashboard."
     },
-    {
+        {
         "question": "What payment methods do you accept?",
         "answer": "We accept major credit cards (Visa, MasterCard, Amex), PayPal, and Google Pay. We do not accept cryptocurrency or checks."
     },
@@ -38,45 +79,6 @@
     {
         "question": "How do I contact human support?",
         "answer": "You can contact human support by emailing support@ourcompany.com or by calling 1-800-555-0199 between 9 AM and 5 PM EST."
-    },
-    {
-        "question": "Is my data secure?",
-        "answer": "Yes, we use industry-standard encryption (AES-256) to protect your data. We do not sell your personal information to third parties."
-    },
-    {
-        "question": "Can I share my account with others?",
-        "answer": "Per our Terms of Service, accounts are for individual use only. Sharing credentials may lead to account suspension. We recommend our 'Team Plan' for multiple users."
-    },
-    {
-        "question": "The app is crashing on my phone, what should I do?",
-        "answer": "Please ensure you have the latest version of the app installed. If the issue persists, try clearing the app cache or reinstalling the application."
-    },
-    {
-        "question": "Do you support Two-Factor Authentication (2FA)?",
-        "answer": "Yes, we strongly recommend enabling 2FA. You can set it up in the 'Security' section of your account settings using SMS or an authenticator app."
-    },
-    {
-        "question": "How do I cancel my subscription?",
-        "answer": "To cancel, go to 'Settings' > 'Billing' > 'Manage Subscription' and click 'Cancel'. You will retain access until the end of your current billing cycle."
-    },
-    {
-        "question": "What is the return policy for physical goods?",
-        "answer": "Physical items can be returned within 30 days of receipt if they are unused and in original packaging. Return shipping fees may apply."
-    },
-    {
-        "question": "Why was my credit card declined?",
-        "answer": "Cards are usually declined due to insufficient funds, incorrect billing address, or expiration. Please check your details or contact your bank."
-    },
-    {
-        "question": "Can I change my username?",
-        "answer": "Usernames can be changed once every 30 days. Go to 'Profile Settings' to update your display name."
-    },
-    {
-        "question": "Where can I find the API documentation?",
-        "answer": "Our developer API documentation is available at developer.ourcompany.com/docs. You will need an API key to make requests."
-    },
-    {
-        "question": "How do I report a bug?",
-        "answer": "If you encounter a bug, please submit a report via our 'Feedback' form in the app footer, including screenshots and steps to reproduce the issue."
     }
+
 ]
