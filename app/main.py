@@ -2,11 +2,11 @@ import os
 import json
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware # <--- 1. IMPORT THIS
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Dict, List
 
-# --- LangChain & AI Imports ---
+# LangChain & AI Imports
 from langchain_groq import ChatGroq
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
@@ -17,7 +17,7 @@ from langchain_core.messages import HumanMessage, AIMessage
 load_dotenv()
 app = FastAPI()
 
-# --- 2. ADD THIS MIDDLEWARE SECTION ---
+# MIDDLEWARE SECTION TO HANDLE 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # Allows all origins (files, localhost, etc.)
@@ -25,7 +25,7 @@ app.add_middleware(
     allow_methods=["*"],  # Allows all methods (POST, GET, etc.)
     allow_headers=["*"],  # Allows all headers
 )
-# --------------------------------------
+
 
 session_store: Dict[str, List] = {} 
 
@@ -43,24 +43,29 @@ def load_faq_data(file_path):
 
 print("Loading AI models...")
 embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
-# Ensure this path is correct relative to where you run the command
+
+# LOADED FAQ DATA FROM faq_data.json as it contain contex for GROQ
 faq_documents = load_faq_data("data/faq_data.json") 
 vector_store = FAISS.from_documents(faq_documents, embeddings)
 retriever = vector_store.as_retriever(search_kwargs={"k": 2})
 
+# selected this model 
 llm = ChatGroq(
     model="llama-3.3-70b-versatile",
     temperature=0,
     api_key=os.getenv("GROQ_API_KEY")
 )
 
+# Prompt for GROQ it will use the context to anser
 system_prompt = """You are a customer support agent.
 Use the Context below to answer the user.
 If the answer is NOT in the context, reply exactly: "ESCALATION_REQUIRED".
 
-Context:
-{context}
+Context: 
+{context} 
 """
+#context reference
+
 
 prompt_template = ChatPromptTemplate.from_messages([
     ("system", system_prompt),
@@ -72,6 +77,7 @@ class ChatRequest(BaseModel):
     session_id: str 
     query: str
 
+#creating session id for each conversation
 @app.post("/chat")
 async def chat_endpoint(request: ChatRequest):
     session_id = request.session_id
@@ -79,7 +85,7 @@ async def chat_endpoint(request: ChatRequest):
 
     if session_id not in session_store:
         session_store[session_id] = [] 
-    
+    # storing session id as history 
     history = session_store[session_id]
 
     docs = retriever.invoke(user_query)
