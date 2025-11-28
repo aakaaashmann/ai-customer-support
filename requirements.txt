@@ -10,3 +10,4 @@ sentence-transformers
 faiss-cpu
 pydantic
 requests
+huggingface_hub
