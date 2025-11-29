@@ -1,5 +1,6 @@
 import os
 import json
+import time
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -62,7 +63,23 @@ except FileNotFoundError:
     # Fallback if running from inside app folder
     faq_documents = load_faq_data("../data/faq_data.json")
 
-vector_store = FAISS.from_documents(faq_documents, embeddings)
+
+#  RETRY LOGIC FOR FREE HUGGING FACE API 
+print("Generating vector store... (This may take a moment)")
+vector_store = None
+for attempt in range(5): # Try 5 times
+    try:
+        vector_store = FAISS.from_documents(faq_documents, embeddings)
+        print("Success: Vector store created.")
+        break # Exit loop if successful
+    except Exception as e:
+        print(f"Attempt {attempt+1} failed. The Model might be loading: {e}")
+        print("Waiting 10 seconds before retrying...")
+        time.sleep(10)
+
+if vector_store is None:
+    raise ValueError("Failed to initialize Vector Store after multiple retries. Check API Token or Hugging Face status.")
+
 retriever = vector_store.as_retriever(search_kwargs={"k": 2})
 
 # LLM SETUP
