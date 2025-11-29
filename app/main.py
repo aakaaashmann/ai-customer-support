@@ -7,9 +7,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Dict, List
 
-# LangChain & AI Imports 
+# --- LangChain & AI Imports ---
 from langchain_groq import ChatGroq
-
 from langchain_community.embeddings import HuggingFaceInferenceAPIEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain_core.documents import Document
@@ -30,11 +29,10 @@ app.add_middleware(
 
 session_store: Dict[str, List] = {} 
 
-# API KEY CHECKS
+# --- API KEY CHECKS ---
 if not os.getenv("GROQ_API_KEY"):
     raise ValueError("GROQ_API_KEY not found in .env file")
 
-# Added check for Hugging Face Token
 if not os.getenv("HUGGINGFACEHUB_API_TOKEN"):
     raise ValueError("HUGGINGFACEHUB_API_TOKEN not found. Please add it to .env or Render Environment Variables.")
 
@@ -49,8 +47,8 @@ def load_faq_data(file_path):
 
 print("Loading AI models via API (Low RAM mode)...")
 
-# CHANGED: EMBEDDING MODEL
-# This uses the API instead of downloading the model to RAM
+# --- EMBEDDING MODEL ---
+# Using the API instead of downloading to RAM
 embeddings = HuggingFaceInferenceAPIEmbeddings(
     api_key=os.getenv("HUGGINGFACEHUB_API_TOKEN"),
     model_name="sentence-transformers/all-MiniLM-L6-v2"
@@ -63,22 +61,31 @@ except FileNotFoundError:
     # Fallback if running from inside app folder
     faq_documents = load_faq_data("../data/faq_data.json")
 
-
-#  RETRY LOGIC FOR FREE HUGGING FACE API 
-print("Generating vector store... (This may take a moment)")
+# --- UPDATED RETRY LOGIC (MORE PATIENCE) ---
+print("Generating vector store... (This depends on Hugging Face API speed)")
 vector_store = None
-for attempt in range(5): # Try 5 times
+
+# Increase attempts to 10, and wait 30 seconds between tries.
+# This gives the model 5 minutes to wake up.
+for attempt in range(10): 
     try:
+        # 1. Test the connection first
+        print(f"Attempt {attempt+1}/10: Connecting to Hugging Face...")
+        test_embed = embeddings.embed_query("test connection")
+        
+        # 2. If test passes, build the store
         vector_store = FAISS.from_documents(faq_documents, embeddings)
-        print("Success: Vector store created.")
-        break # Exit loop if successful
+        print("Success: Vector store created!")
+        break 
     except Exception as e:
-        print(f"Attempt {attempt+1} failed. The Model might be loading: {e}")
-        print("Waiting 10 seconds before retrying...")
-        time.sleep(10)
+        print(f"Attempt {attempt+1} failed. Error: {e}")
+        print("The Hugging Face model is likely loading. Waiting 30 seconds...")
+        time.sleep(30)
 
 if vector_store is None:
-    raise ValueError("Failed to initialize Vector Store after multiple retries. Check API Token or Hugging Face status.")
+    # If it fails after 5 minutes, we cannot start.
+    print("CRITICAL ERROR: Could not connect to Embedding API.")
+    raise ValueError("Failed to initialize Vector Store. Check Render Logs for specific error details.")
 
 retriever = vector_store.as_retriever(search_kwargs={"k": 2})
 
