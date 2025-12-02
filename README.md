@@ -1,7 +1,7 @@
 # 🤖 AI Customer Support Agent
 
 ## 📖 Project Overview
-This project is an intelligent Customer Support Bot designed to automate FAQ responses and handle complex conversational flows. Built as part of the **Unthinkable Solutions** assignment, this agent simulates a real-world support environment.
+This project is an intelligent Customer Support Bot designed to automate FAQ responses and handle complex conversational flows. Built as part of the **Learning and Practice** assignment, this agent simulates a real-world support environment.
 
 It utilizes **Retrieval-Augmented Generation (RAG)** to provide accurate answers from a knowledge base and maintains **Contextual Memory** to hold natural, multi-turn conversations.
 
